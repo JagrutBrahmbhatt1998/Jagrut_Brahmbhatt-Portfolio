@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html class="no-js ss-preload" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Development of a Life Prediction Model for Fretting Fatigue in Turbine Blade-Disk Contacts - Jagrut Brahmbhatt</title>
+    <meta name="description" content="Oxidation Assisted Fretting Fatigue of Commercial Jet Engine Discs and Blades">
+    <meta name="author" content="Jagrut Brahmbhatt">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        /* CSS Variables */
+        :root {
+            --font-1: "Public Sans", sans-serif;
+            --font-2: "DM Serif Display", serif;
+            --color-1: hsla(36, 72%, 70%, 1);
+            --color-2: hsla(168, 62%, 36%, 1);
+            --color-text: #a1a1a2;
+            --color-text-dark: #ffffff;
+            --color-text-light: #727373;
+            --color-body: #141516;
+            --color-border: rgba(255, 255, 255, .05);
+            --color-gray-9: #2c2c2d;
+            --color-gray-10: #141516;
+            --base-size: 62.5%;
+            --base-font-size: 1.9rem;
+            --space: 3.2rem;
+            --vspace-0_5: calc(0.5 * var(--space));
+            --vspace-1: var(--space);
+            --vspace-1_5: calc(1.5 * var(--space));
+            --vspace-2: calc(2 * var(--space));
+            --vspace-3: calc(3 * var(--space));
+            --vspace-4: calc(4 * var(--space));
+            --text-xs: 1.319rem;
+            --text-sm: 1.583rem;
+            --text-size: 1.9rem;
+            --text-md: 2.28rem;
+            --text-lg: 2.736rem;
+            --text-xl: 3.283rem;
+            --text-xxl: 3.94rem;
+            --text-display-1: 5.673rem;
+            --width-max: 1200px;
+            --gutter: 2rem;
+        }
+
+        /* Base Styles */
+        * { box-sizing: border-box; }
+        html { font-size: var(--base-size); }
+        body {
+            font-family: var(--font-1);
+            font-size: var(--base-font-size);
+            font-weight: 300;
+            line-height: var(--vspace-1);
+            color: var(--color-text);
+            background-color: var(--color-body);
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-align: justify;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-2);
+            font-weight: 400;
+            color: var(--color-text-dark);
+            margin-top: 0;
+        }
+        h1 { font-size: var(--text-display-1); line-height: var(--vspace-2); margin-bottom: var(--vspace-1); }
+        h2 { font-size: var(--text-xxl); line-height: var(--vspace-1_5); margin-bottom: var(--vspace-0_5); }
+        h3 { font-size: var(--text-xl); line-height: 1.25; margin-bottom: var(--vspace-0_5); }
+        h4 { font-size: var(--text-lg); line-height: var(--vspace-1); margin-bottom: var(--vspace-0_5); }
+        p { margin-bottom: var(--vspace-1); text-align: justify; }
+
+        a { color: var(--color-1); text-decoration: none; transition: all 0.3s ease-in-out; }
+        a:hover { color: var(--color-2); }
+
+        /* Layout */
+        .container { width: 92%; max-width: var(--width-max); margin: 0 auto; padding: 0 0 var(--vspace-4) 0; }
+        .row { display: flex; flex-wrap: wrap; margin: 0 calc(var(--gutter) * -1); }
+        .column { padding: 0 var(--gutter); flex: 1; }
+
+        /* Header */
+        .project-header {
+            text-align: center;
+            margin-bottom: var(--vspace-3);
+            padding: var(--vspace-3) 0;
+            border-bottom: 1px solid var(--color-border);
+            position: relative;
+            z-index: 1;
+        }
+        .project-title {
+            font-size: var(--text-xl);
+            margin-bottom: var(--vspace-0_5);
+            color: var(--color-1);
+            text-shadow: 0 0 10px rgba(0,0,0,.5);
+        }
+        .project-subtitle { font-size: var(--text-md); color: var(--color-text-light); margin-bottom: var(--vspace-1); text-transform: uppercase; letter-spacing: .2em; }
+        .project-meta { display: flex; justify-content: center; gap: var(--vspace-1); flex-wrap: wrap; margin-bottom: var(--vspace-1); }
+        .meta-item { background: var(--color-gray-9); padding: var(--vspace-0_5) var(--vspace-1); border-radius: 4px; font-size: var(--text-sm); }
+
+        /* Sections */
+        .section { margin-bottom: var(--vspace-0_5); padding: var(--vspace-1) 0; }
+        .section-title { display: flex; align-items: center; margin-bottom: var(--vspace-1); font-size: var(--text-lg); color: var(--color-1); }
+
+        /* Cards */
+        .card {
+            background: var(--color-gray-9);
+            padding: var(--vspace-1_5);
+            border-radius: 8px;
+            margin-bottom: var(--vspace-1);
+            border: 1px solid var(--color-border);
+        }
+        .card h4 { color: var(--color-1); margin-bottom: var(--vspace-0_5); }
+        .card > :first-child { margin-top: 0; }
+        .card > :last-child  { margin-bottom: 0; }
+
+        /* Horizontal Layout Cards */
+        .horizontal-card {
+            display: flex;
+            flex-direction: column;
+            gap: var(--vspace-0_5);
+        }
+
+        /* Card title spanning full width */
+        .card-title-centered {
+            color: var(--color-1);
+            text-align: center;
+            margin-bottom: var(--vspace-0_3);  /* Reduced from var(--vspace-1_5) */
+            padding-bottom: var(--vspace-0_5);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        /* Content wrapper for text and image side by side */
+        .card-content-wrapper {
+            display: flex;
+            gap: var(--vspace-2);
+            align-items: center;
+        }
+
+        .card-content-wrapper.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .content-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .image-section {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: var(--text-sm);
+            color: var(--color-text-light);
+            margin-top: var(--vspace-0_5);
+            font-style: italic;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(218, 165, 105, 0.08);
+            border-left: 4px solid var(--color-1);
+            padding: var(--vspace-1);
+            margin: var(--vspace-1) 0;
+            border-radius: 4px;
+        }
+
+        .highlight-box strong {
+            color: var(--color-1);
+        }
+
+        /* Overview Grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--vspace-1);
+            margin-top: var(--vspace-1);
+        }
+
+        .overview-item {
+            background: var(--color-gray-10);
+            padding: var(--vspace-1);
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+        }
+
+        .overview-item h4 {
+            color: var(--color-2);
+            font-size: var(--text-md);
+            margin-bottom: var(--vspace-0_5);
+        }
+
+        .overview-item p {
+            margin-bottom: 0;
+            font-size: var(--text-sm);
+        }
+
+        /* Skills Section - Improved Layout */
+        .skills-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--vspace-1_5);
+        }
+
+        .skills-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--vspace-1_5);
+        }
+
+        .skill-category {
+            background: var(--color-gray-10);
+            padding: var(--vspace-1_5);
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-1);
+        }
+
+        .skill-category h4 {
+            color: var(--color-1);
+            font-size: var(--text-md);
+            margin-bottom: var(--vspace-1);
+            text-align: left;
+            padding-bottom: var(--vspace-0_5);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .skill-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .skill-list li {
+            padding: 0;
+            font-size: var(--text-sm);
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.4;
+        }
+
+        .skill-list li::before {
+            content: "▸";
+            color: var(--color-1);
+            margin-right: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* Lists */
+        .feature-list { 
+            list-style: none; 
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-list li { 
+            padding: 0.6rem 0; 
+            padding-left: var(--vspace-1_5); 
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .feature-list li::before { 
+            content: "▸"; 
+            color: var(--color-1); 
+            position: absolute; 
+            left: 0; 
+            top: 0.6rem; 
+        }
+
+        /* Navigation */
+        .nav-back { position: fixed; top: 2rem; left: 2rem; background: var(--color-gray-9); padding: var(--vspace-0_5) var(--vspace-1); border-radius: 4px; border: 1px solid var(--color-border); z-index: 100; }
+        .nav-back:hover { background: var(--color-1); color: var(--color-body); }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: var(--vspace-1);
+            margin: var(--vspace-1_5) 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--vspace-0_5);
+        }
+
+        .stat-value {
+            font-size: var(--text-xl);
+            color: var(--color-1);
+            font-weight: 600;
+            display: block;
+            font-family: var(--font-2);
+        }
+
+        .stat-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 800px) {
+            .container { width: 100%; padding-left: 6vw; padding-right: 6vw; }
+            .project-meta { flex-direction: column; align-items: center; }
+            .row { flex-direction: column; }
+            .nav-back { position: static; margin-bottom: var(--vspace-1); display: inline-block; }
+            h1 { font-size: var(--text-xxl); }
+            .project-title { font-size: var(--text-lg); }
+            
+            .card-content-wrapper,
+            .card-content-wrapper.reverse {
+                flex-direction: column;
+            }
+            
+            .image-section img {
+                max-height: 300px;
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Header Background Image */
+        .project-header {
+            position: relative; z-index: 1;
+            margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%);
+            padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%);
+            padding-top: var(--vspace-4); overflow-x: hidden;
+        }
+        .project-header::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('./images/projects/fretting-bg.png');
+            background-size: cover; background-position: center; opacity: 0.15; z-index: -1; overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="nav-back">← Back to Portfolio</a>
+
+    <div class="container">
+        <header class="project-header">
+            <h1 class="project-title">Development of a Life Prediction Model for Fretting Fatigue in Turbine Blade-Disk Contacts</h1>
+            <div class="project-meta">
+                <span class="meta-item">Advisor - Prof. Richard Neu</span>
+                <span class="meta-item">Affiliation - Georgia Institute of Technology</span>
+                <span class="meta-item">Sponsor - Pratt & Whitney</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Project Overview Card -->
+            <section class="section">
+                <div class="card">
+                    <h2 style="color: var(--color-1); text-align: center; margin-bottom: var(--vspace-1_5);">Project Overview</h2>
+                    
+                    <p>This research aims at developing a comprehensive life prediction model for fretting wear-fatigue interactions in turbine blade and disk interfaces, addressing critical structural integrity challenges posed by corrosion pits and micro-cracks in high-performance jet engines. Sponsored by Pratt & Whitney and conducted at Georgia Institute of Technology, the project targets commercial jet engines to address FAA lifing risks, reduce operating costs, and substantially improve turbine reliability.</p>
+
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-value">34.5-138 MPa</span>
+                            <span class="stat-label">Contact Pressure Range</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Up to 900 MPa</span>
+                            <span class="stat-label">Specimen Stress</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">650°C</span>
+                            <span class="stat-label">Operating Temperature</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Inconel 718</span>
+                            <span class="stat-label">Material System</span>
+                        </div>
+                    </div>
+
+                    <div class="overview-grid">
+                        <div class="overview-item">
+                            <h4>Research Objective</h4>
+                            <p>Establish predictive methodology for fretting fatigue life assessment under multiaxial loading conditions with minimal wear and negligible gross slip.</p>
+                        </div>
+                        <div class="overview-item">
+                            <h4>Technical Approach</h4>
+                            <p>2D plane strain FEA models incorporating rig compliance and multi-step cyclic loading to simulate actual disk slot edge geometry and contact mechanics.</p>
+                        </div>
+                        <div class="overview-item">
+                            <h4>Key Deliverable</h4>
+                            <p>Calibrate FEA methodology enabling pre-test life predictions and lab-based validation for FAA certification and reliability improvement.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: FEA Model & Meshing Strategy -->
+            <section class="section">
+                <div class="card horizontal-card">
+                    <h3 class="card-title-centered">FEA Model Development & Meshing Strategy</h3>
+                    
+                    <div class="card-content-wrapper">
+                        <div class="content-section">
+                            <ul class="feature-list">
+                                <li>Employs 2D plane strain FEA model with multi-scale meshing approach</li>
+                                <li>Transitions from macro-level boundary conditions to highly refined micro-level resolution at contact interface</li>
+                                <li>Captures complex stress concentrations and displacement fields critical for fretting fatigue analysis</li>
+                                <li>Enables accurate evaluation of stick-slip regions under combined normal and tangential loading</li>
+                                <li>Operating conditions: contact pressures 34.5-138 MPa, specimen stresses up to 900 MPa</li>
+                                <li>Refined mesh resolution optimizes computational efficiency while maintaining high accuracy in critical zones</li>
+                            </ul>
+                        </div>
+                        <div class="image-section">
+                            <img src="./images/projects/fretting-1.png" alt="Wear Pin and Specimen Macro-Micro Meshing">
+                            <p class="image-caption">Macro-Micro Scale Meshing of Wear Pin and Specimen Contact Interface</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Contact Mechanics & Stress Analysis -->
+            <section class="section">
+                <div class="card horizontal-card">
+                    <h3 class="card-title-centered">Contact Mechanics & Stress Distribution Analysis</h3>
+                    
+                    <div class="card-content-wrapper reverse">
+                        <div class="content-section">
+                            <ul class="feature-list">
+                                <li>Reveals peak contact pressures of approximately 138 MPa at interface</li>
+                                <li>Identifies significant stress concentrations at contact edges—primary crack nucleation sites</li>
+                                <li>Simulates multi-step loading with two complete fatigue cycles at R=0.1</li>
+                                <li>Demonstrates stabilized contact response by second cycle for reliable life predictions</li>
+                                <li>High stress concentrations correlate directly with observed crack initiation locations</li>
+                                <li>Validates computational approach for fretting fatigue prediction under multiaxial loading</li>
+                                <li>Benchmarked against experimental data from Ni/Co-base superalloys at temperatures up to 650°C</li>
+                            </ul>
+                        </div>
+                        <div class="image-section">
+                            <img src="./images/projects/fretting-2.png" alt="Von Mises Stress Plots">
+                            <p class="image-caption">Von Mises Stress Distribution in Contact Region</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Stick-Slip Zone & Life Prediction -->
+            <section class="section">
+                <div class="card horizontal-card">
+                    <h3 class="card-title-centered">Fretting Zone Characterization & Life Prediction Framework</h3>
+                    
+                    <div class="card-content-wrapper">
+                        <div class="content-section">
+                            <ul class="feature-list">
+                                <li>Identifies distinct stick and slip zones within the contact region</li>
+                                <li>Stick zone: minimal tangential displacement with high shear traction</li>
+                                <li>Slip zone: cyclic relative motion generating wear debris and surface damage</li>
+                                <li>Crack initiation occurs at stick-slip boundary where stress concentrations maximize</li>
+                                <li>Critical transition zone combines high normal pressure with oscillating shear stress</li>
+                                <li>Enables application of non-local SWT criterion for life assessment</li>
+                                <li>Provides framework for accurate fretting fatigue life prediction under service conditions</li>
+                            </ul>
+                        </div>
+                        <div class="image-section">
+                            <img src="./images/projects/fretting-3.png" alt="Fretting Stick/Slip Zone">
+                            <p class="image-caption">Stick-Slip Zone Identification and Stress Concentration Analysis</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills & Competencies Card -->
+            <section class="section">
+                <div class="card">
+                    <h2 style="color: var(--color-1); text-align: center; margin-bottom: var(--vspace-1_5);">Technical Skills & Competencies</h2>
+                    
+                    <div class="skills-container">
+                        <div class="skills-row">
+                            <div class="skill-category">
+                                <h4>Finite Element Analysis</h4>
+                                <ul class="skill-list">
+                                    <li>2D Plane Strain Modeling</li>
+                                    <li>Contact Mechanics Simulation</li>
+                                    <li>Multiaxial Loading Analysis</li>
+                                    <li>Cyclic Plasticity Modeling</li>
+                                    <li>Macro-Micro Scale Meshing</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-category">
+                                <h4>Materials & Mechanics</h4>
+                                <ul class="skill-list">
+                                    <li>Ni/Co-Base Superalloys</li>
+                                    <li>Fretting Fatigue Phenomena</li>
+                                    <li>Oxidation Mechanisms</li>
+                                    <li>High-Temperature Behavior</li>
+                                    <li>Crack Initiation Analysis</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-category">
+                                <h4>Life Prediction Methods</h4>
+                                <ul class="skill-list">
+                                    <li>SWT Criterion Application</li>
+                                    <li>Non-Local Approaches</li>
+                                    <li>Fatigue Life Assessment</li>
+                                    <li>Wear-Fatigue Interactions</li>
+                                    <li>Validation & Calibration</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="skills-row">
+                            <div class="skill-category">
+                                <h4>Experimental Design</h4>
+                                <ul class="skill-list">
+                                    <li>Test Rig Development</li>
+                                    <li>Specimen Geometry Design</li>
+                                    <li>Boundary Condition Setup</li>
+                                    <li>Compliance Characterization</li>
+                                    <li>Literature Benchmarking</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-category">
+                                <h4>Aerospace Applications</h4>
+                                <ul class="skill-list">
+                                    <li>Turbine Blade/Disc Interfaces</li>
+                                    <li>HPT Engine Components</li>
+                                    <li>FAA Certification Requirements</li>
+                                    <li>Reliability Engineering</li>
+                                    <li>Cost-Risk Optimization</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-category">
+                                <h4>Research & Analysis</h4>
+                                <ul class="skill-list">
+                                    <li>Computational Modeling</li>
+                                    <li>Results Validation</li>
+                                    <li>Technical Documentation</li>
+                                    <li>Industry Collaboration</li>
+                                    <li>Knowledge Transfer</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.card, .section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

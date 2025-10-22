@@ -119,17 +119,25 @@
             margin: 0 auto;
             padding: 0 0 var(--vspace-4) 0; /* Removed top padding */
         }
-
+        
+        /* add in all project html files - start */
         .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 calc(var(--gutter) * -1);
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 calc(var(--gutter) * -1);
+        gap: var(--vspace-1);   /* new: consistent spacing between cards */
         }
 
         .column {
-            padding: 0 var(--gutter);
-            flex: 1;
+        padding: 0 var(--gutter);
+        flex: 1;
+        display: flex;          /* new: so child card can stretch */
         }
+
+        .column .card {
+        flex: 1;                /* new: equal height for all cards in a row */
+        }
+        /* add in all project html files - end */
 
         /* Header */
         .project-header {
@@ -193,7 +201,7 @@
         /* Cards */
         .card {
             background: var(--color-gray-9);
-            padding: var(--vspace-1_5);
+            padding: var(--vspace-1) var(--vspace-1_5);
             border-radius: 8px;
             margin-bottom: var(--vspace-1);
             border: 1px solid var(--color-border);
@@ -203,6 +211,16 @@
             color: var(--color-1);
             margin-bottom: var(--vspace-0_5);
         }
+
+        /* add in all project html files - start */
+        
+        /* keep natural paragraph spacing; only trim edges */
+        .card > :first-child { margin-top: 0; }
+        .card > :last-child  { margin-bottom: 0; }
+        /* remove this if you added it earlier */
+        /* .card p { margin: 0; }  <-- delete */
+        
+        /* add in all project html files - end */
 
         /* Table */
         .results-table {
@@ -474,29 +492,45 @@
                     </div>
                 </div>
 
-                 <!-- <div class="column"> -->
-                        <div class="card">
-                            <h4 > GEOMETRY & MODELING</h4>
-                            <div class="" style="width: 100%; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-                                <div >
-                                    <img src="./images/projects/flipchip-geometry.png" style="height: 300px; width: 500px;" alt="FEM model geometry" class="project-image">
-                                </div>
-                               <div style="">
-                                    <img src="./images/projects/2d58848f-29a7-432a-899e-c29f8d0c81ac.jpg" style="height: 300px; width: 500px;"" alt="FEM model geometry" class="project-image">
-                                    
-                               </div>
-                            </div>
-                             <p class="image-caption">2D plane strain model of diagonal flip-chip cross-section</p>
+            </section>
+            </section>
 
-                            
-                            <ul class="feature-list">
-                                <li>2D plane strain model of diagonal flip-chip cross-section</li>
-                                <li>Shared topology meshing for accurate stress continuity</li>
-                                <li>Fine mesh at solder joints to capture stress gradients</li>
-                                <li>PLANE183 elements used for nonlinear plasticity and viscoplastic behavior</li>
-                            </ul>
+                <!-- <div class="column"> -->
+                <section class="section">
+                <h2 class="section-title">
+                    GEOMETRY & MODELING
+                </h2>
+                
+                <div class="card">
+                    <div style="width: 100%; padding: 20px; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                        <!-- Left image + caption -->
+                        <div style="text-align: center; flex: 1;">
+                        <img src="./images/projects/flipchip-geometry.png"
+                            style="height: 300px; width: 500px;"
+                            alt="FEM model geometry"
+                            class="project-image">
+                        <p class="image-caption">2D plane strain model of diagonal flip-chip cross-section</p>
                         </div>
-                    <!-- </div> -->
+
+                        <!-- Right image + caption -->
+                        <div style="text-align: center; flex: 1;">
+                        <img src="./images/projects/2d58848f-29a7-432a-899e-c29f8d0c81ac.jpg"
+                            style="height: 300px; width: 500px;"
+                            alt="FEM model geometry"
+                            class="project-image">
+                        <p class="image-caption">2.5D plane strain model of diagonal flip-chip cross-section</p>
+                        </div>
+                    </div>
+
+                    <!-- keep your descriptive text/list -->
+                    <ul class="feature-list">
+                        <li>2D plane strain model of diagonal flip-chip cross-section</li>
+                        <li>Shared topology meshing for accurate stress continuity</li>
+                        <li>Fine mesh at solder joints to capture stress gradients</li>
+                        <li>PLANE183 elements used for nonlinear plasticity and viscoplastic behavior</li>
+                    </ul>
+                </div>
+            <!-- </div> -->
                
             </section>
 
@@ -530,10 +564,16 @@
                         </div>
                     </div>
                 </div>
-
+            
+            </section>
+            </section>
+                
                 <!-- Results Table -->
+                <h2 class="section-title">
+                    OPTIMIZATION RESULTS
+                </h2>
+
                 <div class="card">
-                    <h4>Optimization Results</h4>
                     <table class="results-table">
                         <thead>
                             <tr>
@@ -567,11 +607,12 @@
 
                     <div style="text-align: center;">
                             <img src="./images/projects/flipchip-strain.png" alt="Stress trend graph" class="project-image">
-                            <p class="image-caption">Non-linear stress trend with varying glass thickness</p>
+                            <p class="image-caption">Von Mises Stresses at Package end for No Underfill case</p>
                     </div>
 
                     
                 </div>
+            
             </section>
 
             <!-- Impact -->
