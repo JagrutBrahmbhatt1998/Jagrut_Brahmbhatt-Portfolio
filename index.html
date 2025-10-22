@@ -2,6 +2,145 @@
 <html class="no-js ss-preload" lang="en">
 <head>
 
+    <style>
+        /* Custom Cursor Styles */
+        .custom-cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            background-color: #eabe7c;
+            border-radius: 50%;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        /* Hide default cursor */
+        body,
+        body * {
+            cursor: none !important;
+        }
+
+        /* Hover state - translucent and larger */
+        .custom-cursor.hover {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(234, 190, 124, 0.2);
+            border: 2px solid #eabe7c;
+            opacity: 0.8;
+        }
+      
+        /* Reduce space between "Education" and "My Works" */
+        .s-works {
+            padding-top: 3rem !important;  /* default is often 12rem */
+        }
+
+        /* Reduce large vertical space before "Get in Touch" */
+        .s-contact {
+            padding-top: 2rem !important;  /* default usually 10–12rem */
+        }
+
+        /* Optional: tighten slightly below the last project card */
+        .s-works {
+            padding-bottom: 0rem !important;  /* default is often 8–10rem */
+        }
+
+        /* ===== Expertise Cards ===== */
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .expertise-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.5px;
+            transition: all 0.25s ease-in-out;
+        }
+
+        .expertise-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+            border-color: #eabe7c;
+            color: #eabe7c;
+        }
+
+        /* ===== Color-filled Expertise Cards ===== */
+
+        /* Base card styling (centered) */
+        .expertise-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 100px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            transition: all 0.25s ease-in-out;
+        }
+
+        /* Semiconductor & Packaging */
+        .semigroup {
+            background: rgba(234, 190, 124, 0.18);
+            border-color: rgba(234, 190, 124, 0.5);
+        }
+        .semigroup:hover {
+            background: rgba(234, 190, 124, 0.35);
+            border-color: #eabe7c;
+            color: #fff5df;
+        }
+
+        /* Thermal & Fluid Systems */
+        .thermalgroup {
+            background: rgba(82, 200, 255, 0.18);
+            border-color: rgba(82, 200, 255, 0.5);
+        }
+        .thermalgroup:hover {
+            background: rgba(82, 200, 255, 0.35);
+            border-color: #52c8ff;
+            color: #eaffff;
+        }
+
+        /* Mechanical & Optimization */
+        .mechgroup {
+            background: rgba(150, 255, 150, 0.18);
+            border-color: rgba(150, 255, 150, 0.5);
+        }
+        .mechgroup:hover {
+            background: rgba(150, 255, 150, 0.35);
+            border-color: #8fffa0;
+            color: #f3fff3;
+        }
+
+        /* Programming & Automation */
+        .proggroup {
+            background: rgba(255, 150, 255, 0.18);
+            border-color: rgba(255, 150, 255, 0.5);
+        }
+        .proggroup:hover {
+            background: rgba(255, 150, 255, 0.35);
+            border-color: #ff9eff;
+            color: #fff2ff;
+        }
+
+
+    </style>
+
     <!--- basic page needs
     ================================================== -->
     <meta charset="utf-8">
@@ -29,6 +168,8 @@
 
 <body id="top">
 
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
 
     <!-- # preloader
     ================================================== -->
@@ -87,19 +228,17 @@
                 <div class="row intro-content wide">
 
                     <div class="column">
-                        <!-- <div class="text-pretitle with-line">
-                            Hello World
-                        </div> -->
-
                         <h1 class="text-huge-title">
-                            <!-- I am    -->
-                            <p style="color: #eabe7c;"><br>Jagrut Brahmbhatt <br></p>
-                            <p></p>
-                            Research Assistant | Design Engineer <br>
-                            <!-- a Research Assistant <br>
-                            & Design Engineer <br>  -->
-                            
+                            <p style="color: #eabe7c; margin-bottom: 1rem;">Jagrut Brahmbhatt</p>
+                            Research Assistant | Design Engineer
                         </h1>
+                    </div>
+
+                    <div class="scroll-indicator">
+                    <a href="#about">
+                        <span class="arrow">↓</span>
+                        <span class="scroll-text">Push to Scroll</span>
+                    </a>
                     </div>
 
                     <ul class="intro-social">
@@ -109,9 +248,11 @@
 
                 </div> <!-- end intro content -->
 
+                <!-- 
                 <a href="#about" class="intro-scrolldown smoothscroll">
                     <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"/></svg>
                 </a>
+                -->
 
             </section> <!-- end s-intro -->
 
@@ -135,11 +276,27 @@
                                 About
                             </h2>
                             <p class="attention-getter" data-animate-el>
-                               I am a graduate student in Mechanical Engineering at the Georgia Institute of Technology, with over three years of industry experience in pressure vessel and reactor design at Larsen & Toubro. My expertise lies in mechanical design, Finite Element Analysis (FEA), Computational Fluid Dynamics (CFD), and advanced electronic packaging.
-
-Through academic research and hands-on engineering, I focus on developing high-reliability solutions for complex thermal and structural systems. I am driven by precision, performance, and a commitment to engineering excellence.
+                              
+                                I engineer systems where heat, structure, and flow converge. 
+                                At Georgia Tech, my research centers on multiphysics modeling, 
+                                <strong>Finite Element Analysis (FEA)</strong>, and 
+                                <strong>Computational Fluid Dynamics (CFD)</strong> 
+                                for Jet Engines and advanced semiconductor packaging.
                             </p>
-                            <a href="./assets/Jagrut_Brahmbhatt.pdf" class="btn btn--medium u-fullwidth" data-animate-el>Download CV</a>
+
+                            <p data-animate-el>
+                                Previously at Larsen & Toubro, I designed ASME-certified reactors 
+                                and pressure vessels — work that grounded my focus on design for manufacturability 
+                                and reliability.
+                            </p>
+
+                            <p data-animate-el>
+                                I now apply that foundation to micro-scale design, using simulation 
+                                as a tool to build systems that perform predictably under 
+                                real-world constraints.    
+
+                            </p>
+                            <a href="./assets/Jagrut_Brahmbhatt.pdf" class="btn btn--medium u-fullwidth" data-animate-el>Download Resume</a>
 
                         </div>
                     </div>
@@ -151,30 +308,31 @@ Through academic research and hands-on engineering, I focus on developing high-r
 
                         <h2 class="text-pretitle with-line" data-animate-el>Expertise</h2>
 
-                        <ul class="skills-list h3" data-animate-el>
-                            <div class="row">
-                                <div class="column">
-                                    <p>Semiconductor Package Design</p>
-                                    <p>Electronics Thermal Solutions</p>
-                                    <p>Machine Learning </p>
-                                    <p>Mechanical Product Design (CAD/CAE)</p>
-                                    <p>Heat Transfer & Cryogenics</p>
-                                    <p>Python/C++</p>
-                                    
-                                </div>
-                                <div class="column">
-                                    <p>Optimization & Numerical Methods</p>
-                                    <p>ANSYS Fluent & Mechanical</p>
-                                    <p>Computational Fluid Dynamics (CFD)</p>
-                                    <p>Finite Element Analysis (FEA)</p>
-                                    <p>Design for Manufacturability (DFM)</p>
-                                    <p>Reactor & Pressure Vessel Design</p>
-                                </div>
-                            </div>
-                                <!-- <li style="list-style: none; font-weight: 500;">
-                                    Fluid Dynamics (CFD) • Multiphase Flow Modeling • ANSYS Fluent & Mechanical • Heat Transfer & Cryogenics • Finite Element Analysis (FEA) • Thermal-Structural Simulation • Design for Manufacturability (DFM) • Mechanical Product Design (CAD/CAE) • Electronics Cooling & Microchannel Design • Boiler & Pressure Vessel Code Compliance • Machine Learning for Engineering Applications • Optimization & Numerical Methods (L-BFGS-B, UDFs)
-                                </li> -->
-                        </ul>
+                        <div class="expertise-grid" data-animate-el>
+
+                            <!-- Semiconductor & Packaging -->
+                            <div class="expertise-card semigroup">Flip-Chip Reliability & Glass-Core Packaging</div>
+                            <div class="expertise-card semigroup">Thermo-Mechanical Reliability Design</div>
+                            <div class="expertise-card semigroup">Design for Manufacturability (DFM)</div>
+
+                            <!-- Thermal & Fluid Systems -->
+                            <div class="expertise-card thermalgroup">Heat Transfer & Cryogenics</div>
+                            <div class="expertise-card thermalgroup">Finite Element Analysis (FEA)</div>
+                            <div class="expertise-card thermalgroup">Computational Fluid Dynamics (CFD)</div>
+                            <div class="expertise-card thermalgroup">Multiphysics Simulation (ANSYS Fluent, Mechanical, ABAQUS)</div>
+                            <div class="expertise-card thermalgroup">Thermal–Structural Simulation</div>
+
+                            <!-- Mechanical & Optimization -->
+                            <div class="expertise-card mechgroup">Mechanical Product Design (CAD/CAE)</div>
+                            <div class="expertise-card mechgroup">Structural & Fatigue Analysis</div>
+                            <div class="expertise-card mechgroup">Optimization & Numerical Methods</div>
+
+                            <!-- Programming & Automation -->
+                            <div class="expertise-card proggroup">Python / MATLAB / C++</div>
+                            <div class="expertise-card proggroup">Machine Learning for Engineering Applications</div>
+                        </div>
+
+
 
                     </div>
                 </div> <!-- end about-expertise -->
@@ -853,6 +1011,117 @@ Through academic research and hands-on engineering, I focus on developing high-r
     ================================================== -->
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Custom Cursor Script -->
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+
+        // Track cursor position
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .folio-list__item, input, textarea, [role="button"]');
+
+        interactiveElements.forEach(elem => {
+            elem.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            
+            elem.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+    </script>
+
+    <script>
+    // Inject Scroll Indicator CSS dynamically
+    const scrollIndicatorStyles = `
+    .scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 85%;   /* shift right to clear text */
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 50;
+        opacity: 0.8;
+        animation: fadeIn 1s ease-in 1s forwards;
+    }
+    .scroll-indicator a {
+        color: #eabf7c;
+        text-decoration: none;
+        font-family: var(--font-1);
+        font-size: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    .scroll-indicator .arrow {
+        font-size: 2.5rem;
+        animation: bounce 1.5s infinite;
+    }
+    .scroll-indicator .scroll-text {
+        font-size: 1.3rem;
+        letter-spacing: 0.1em;
+        color: var(--color-text-light);
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(6px); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    `;
+
+// Append the style to the document head
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = scrollIndicatorStyles;
+document.head.appendChild(styleSheet);
+</script>
+
+
+    <script>
+    /* --- Fast scroll-based fade-in animation --- */
+    document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply to cards and sections
+        document.querySelectorAll('.card, .section:not(.project-header)').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(10px)';
+            el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            observer.observe(el);
+        });
+    });
+    </script>
 
 </body>
 </html>
