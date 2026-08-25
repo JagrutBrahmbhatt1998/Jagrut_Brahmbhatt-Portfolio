@@ -383,7 +383,7 @@
     <div class="container">
         <header class="project-header">
             <h1 class="project-title">THERMOMECHANICAL RELIABILITY MODELING FOR FLIP-CHIP GLASS CORE PACKAGES</h1>
-            <p class="project-subtitle">MICROELECTRONICS PACKAGING | PARAMETRIC FATIGUE OPTIMIZATION</p>
+            <p class="project-subtitle">JEDEC SCREENING → COUPLED THERMO-MECHANICAL ANALYSIS</p>
             <div class="project-meta">
                 <span class="meta-item">TEAM LEAD: Jagrut Brahmbhatt</span>
                 <span class="meta-item">PROFESSOR: Dr. Suresh Sitaraman</span>
@@ -401,9 +401,94 @@
                     <!-- <img src="/placeholder.svg" alt="Flip-chip glass core package illustration" class="project-image">
                     <p class="image-caption">Flip-chip glass core package cross-section illustration</p> -->
                     
-                    <p>With the rise of high-performance, miniaturized electronics, ultra-fine pitch flip-chip assemblies using glass core substrates are emerging as next-generation packaging solutions. However, these structures face major thermomechanical reliability challenges—primarily fatigue failure of solder joints under cyclic thermal loading.</p>
-                    
-                    <p>To address this, we developed a detailed finite element modeling (FEM) framework focused on Level 1 assembly (die-on-glass) using a 50 μm solder bump pitch. Our simulation methodology integrates material-level viscoplasticity, parametric design variation, and fatigue life prediction to identify failure modes and propose design mitigation strategies.</p>
+                    <p>With the rise of high-performance, miniaturized electronics, ultra-fine pitch flip-chip assemblies using glass core substrates are emerging as next-generation packaging solutions. Industry is moving toward thinner dies, finer pitch interconnects, and glass core substrates — all of which intensify the dominant reliability challenge: low-cycle fatigue failure of solder joints under cyclic thermal loading.</p>
+
+                    <p>To address this, I developed a finite element modeling framework in two phases. <strong>Phase 1</strong> is a JEDEC thermal-cycling screen of the Level 1 assembly (die-on-glass) at 50 µm solder bump pitch, used to rank glass thickness and underfill coverage. <strong>Phase 2</strong> replaces the prescribed uniform temperature with real operating physics — internal heat generation in the die plus convective cooling — and extends the stack down to the FR4 board, so the model can answer what the screening model structurally cannot.</p>
+
+                    <p>The two phases disagree about which joint fails first, and that disagreement is the point of the study: the isothermal screen identifies the corner die-side bump, while the coupled model shows the board-side SAC305 joints carrying roughly <strong>20× more plastic strain</strong>. Cooling architecture — a system and enclosure decision — turns out to be a first-order mechanical reliability lever.</p>
+                </div>
+            </section>
+
+            <!-- Analysis Strategy -->
+            <section class="section">
+                <h2 class="section-title">
+                    ANALYSIS STRATEGY
+                </h2>
+                <div class="card">
+                    <p>Two-stage approach: a fast screening model to rank design variants, followed by a physics-informed model to identify the true failure driver.</p>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Physics</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Phase 1</strong> — JEDEC thermal screen</td>
+                                <td>Uniform temperature cycle</td>
+                                <td>Fast design ranking</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phase 2</strong> — Coupled thermo-mechanical</td>
+                                <td>Internal heat generation + convection</td>
+                                <td>Identify true failure driver</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Hardware Stack -->
+            <section class="section">
+                <h2 class="section-title">
+                    HARDWARE STACK & MATERIALS
+                </h2>
+                <div class="card">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Layer</th>
+                                <th>Material</th>
+                                <th>Role</th>
+                                <th>Governing property</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Silicon die</td>
+                                <td>Si</td>
+                                <td>Compute element / heat source</td>
+                                <td>Low CTE</td>
+                            </tr>
+                            <tr>
+                                <td>Substrate core</td>
+                                <td>Glass</td>
+                                <td>Interconnect routing</td>
+                                <td>Moderate stiffness, low CTE</td>
+                            </tr>
+                            <tr>
+                                <td>Die-side interconnect</td>
+                                <td>Sn-Ag</td>
+                                <td>Electrical + mechanical</td>
+                                <td>Viscoplastic (Anand)</td>
+                            </tr>
+                            <tr>
+                                <td>Board-side interconnect</td>
+                                <td>SAC305</td>
+                                <td>Electrical + mechanical</td>
+                                <td>Viscoplastic (Anand)</td>
+                            </tr>
+                            <tr>
+                                <td>PCB</td>
+                                <td>FR4</td>
+                                <td>Board-level routing</td>
+                                <td>Higher CTE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>The reliability problem lives in the CTE spread across this stack: silicon and glass expand slowly, FR4 expands quickly, and the solder in between absorbs the difference as cyclic plastic strain.</p>
                 </div>
             </section>
 
@@ -445,18 +530,22 @@
                     <p class="image-caption">Failure mode analysis and risk assessment framework</p> -->
                     
                     <h4>Detection & Mitigation</h4>
-                    <p><strong>Detection:</strong> FEM simulation (ANSYS), Anand viscoplastic modeling, validated via corrected Suhir model</p>
-                    <p><strong>Mitigation:</strong> Parametric FEM analysis on glass thickness and underfill coverage</p>
+                    <p><strong>Detection:</strong> FEM simulation (ANSYS), Anand viscoplastic modeling, validated via corrected Suhir model; coupled transient thermal → static structural analysis to resolve gradients the isothermal screen hides</p>
+                    <p><strong>Mitigation:</strong> Parametric FEM analysis on glass thickness and underfill coverage, plus cooling architecture selected as a reliability parameter rather than a thermal-compliance afterthought</p>
                 </div>
             </section>
 
             <!-- Technical Approach -->
             <section class="section">
                 <h2 class="section-title">
-                   
-                    TECHNICAL APPROACH
+
+                    PHASE 1 — JEDEC THERMAL SCREEN
                 </h2>
-                
+
+                <div class="card">
+                    <p>Objective: rapid reliability screening with limited operating data. The package is cycled per <strong>JEDEC JESD22-A104 Condition B (−55 °C to +125 °C)</strong> for 11 cycles, with temperature imposed as a uniform body load. No internal heat generation is modeled — thermal gradients exist only through the boundary condition.</p>
+                </div>
+
                 <div class="row" style="margin-bottom: 25px;">
                    <div class="column">
                 <div class="card" style="height: 100%;">
@@ -493,12 +582,10 @@
                 </div>
 
             </section>
-            </section>
 
-                <!-- <div class="column"> -->
-                <section class="section">
+            <section class="section">
                 <h2 class="section-title">
-                    GEOMETRY & MODELING
+                    PHASE 1 — GEOMETRY & MESH
                 </h2>
                 
                 <div class="card">
@@ -524,20 +611,20 @@
 
                     <!-- keep your descriptive text/list -->
                     <ul class="feature-list">
-                        <li>2D plane strain model of diagonal flip-chip cross-section</li>
-                        <li>Shared topology meshing for accurate stress continuity</li>
-                        <li>Fine mesh at solder joints to capture stress gradients</li>
+                        <li>2D plane strain model of the diagonal flip-chip cross-section, cut on diagonal half-symmetry</li>
+                        <li>10 mm die on a 25 mm glass substrate, 50 µm pitch Sn-Ag solder bump geometry</li>
+                        <li>Quad-dominant mesh with shared topology at material interfaces for stress continuity</li>
+                        <li>Local refinement in the solder, ABF and Cu layers near bump corners — the region where plastic strain accumulates</li>
                         <li>PLANE183 elements used for nonlinear plasticity and viscoplastic behavior</li>
                     </ul>
+                    <p>Cutting along the package diagonal is deliberate: it puts the corner bump — the one at maximum <strong>distance from the neutral point (DNP)</strong>, and therefore the fatigue-limiting joint — inside the modeled plane.</p>
                 </div>
-            <!-- </div> -->
-               
             </section>
 
             <!-- Parametric Design Optimization -->
             <section class="section">
                 <h2 class="section-title">
-                    PARAMETRIC DESIGN OPTIMIZATION
+                    PHASE 1 — PARAMETRIC DESIGN OPTIMIZATION
                 </h2>
                 
                 <div class="row" style="margin-bottom: 25px;">
@@ -566,11 +653,11 @@
                 </div>
             
             </section>
-            </section>
-                
-                <!-- Results Table -->
+
+            <!-- Results Table -->
+            <section class="section">
                 <h2 class="section-title">
-                    OPTIMIZATION RESULTS
+                    PHASE 1 — OPTIMIZATION RESULTS
                 </h2>
 
                 <div class="card">
@@ -578,26 +665,38 @@
                         <thead>
                             <tr>
                                 <th>Configuration</th>
-                                <th>Δε (%)</th>
-                                <th>Cycles to failure (Kanchanomai)</th>
-                                <th>Cycles to failure (Andersson)</th>
+                                <th>Δε<sub>p</sub></th>
+                                <th>N<sub>f</sub> (Kanchanomai)</th>
+                                <th>N<sub>f</sub> (Andersson)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>200 µm, no underfill</td>
+                                <td>200 µm glass, no underfill <em>(baseline)</em></td>
                                 <td>1.95E-2</td>
                                 <td>1,908</td>
                                 <td>2,002</td>
                             </tr>
                             <tr>
-                                <td>400 µm, half underfill</td>
-                                <td>1.67E-2</td>
-                                <td>2,249</td>
+                                <td>300 µm glass, no underfill</td>
+                                <td>1.87E-2</td>
+                                <td>1,997</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td>400 µm glass, no underfill</td>
+                                <td>1.83E-2</td>
+                                <td>2,043</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td>400 µm glass, half underfill <em>(best)</em></td>
+                                <td><strong>1.67E-2</strong></td>
+                                <td><strong>2,249</strong></td>
                                 <td><strong>2,494</strong></td>
                             </tr>
                             <tr>
-                                <td>400 µm, full underfill</td>
+                                <td>400 µm glass, full underfill</td>
                                 <td>1.73E-2</td>
                                 <td>2,173</td>
                                 <td>2,381</td>
@@ -605,14 +704,295 @@
                         </tbody>
                     </table>
 
+                    <ul class="feature-list">
+                        <li>Highest plastic strain consistently occurred in the <strong>corner solder joints</strong>, consistent with DNP-driven fatigue behavior</li>
+                        <li>Thicker glass → less warpage → lower accumulated strain</li>
+                        <li><strong>Half fillet outperforms full fillet</strong> — the partial fillet redistributes strain away from the critical corner instead of stiffening the whole joint</li>
+                    </ul>
+
                     <div style="text-align: center;">
-                            <img src="./images/projects/flipchip-strain.png" alt="Stress trend graph" class="project-image">
+                            <img src="./images/projects/flipchip-strain.png" alt="Von Mises stress contour at package end" class="project-image">
                             <p class="image-caption">Von Mises Stresses at Package end for No Underfill case</p>
                     </div>
 
-                    
+
                 </div>
-            
+
+            </section>
+
+            <!-- Phase 1 Limitation -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 1 — WHERE THE SCREENING MODEL STOPS
+                </h2>
+                <div class="card">
+                    <p>The whole Phase 1 model rests on one assumption: <strong>a prescribed uniform body temperature</strong>. Every point in the stack sees the same temperature at every time step. That makes the model fast and useful for ranking design variants — and structurally incapable of answering anything that depends on a temperature <em>difference</em> across the package.</p>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <div class="card" style="height: 100%; border-left: 3px solid var(--color-2);">
+                            <h4>What this model resolves ✓</h4>
+                            <ul class="feature-list">
+                                <li>Corner ball identified as the critical joint</li>
+                                <li>Relative ranking of glass thickness</li>
+                                <li>Effect of underfill fillet geometry</li>
+                            </ul>
+                            <p><em>Appropriate for design screening.</em></p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="card" style="height: 100%; border-left: 3px solid #c1553f;">
+                            <h4>What this model cannot answer ✗</h4>
+                            <ul class="feature-list">
+                                <li>Actual die temperature during operation</li>
+                                <li>Thermal gradient through the stack</li>
+                                <li>Difference between top and bottom joint behavior</li>
+                                <li>Impact of cooling strategy on fatigue life</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 2: What changed -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — UPGRADING THE PHYSICS
+                </h2>
+                <div class="card">
+                    <p>Goal: determine how <strong>cooling condition</strong> affects solder fatigue life. Instead of prescribing temperature, the die generates heat and the package rejects it through a convective boundary — so the temperature field becomes an output of the model rather than an input to it. The stack is also extended down through the board-side SAC305 joints to the FR4 PCB.</p>
+
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Phase 1</th>
+                                <th>Phase 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Thermal load</td>
+                                <td>Prescribed uniform ΔT</td>
+                                <td>Heat generation + convection</td>
+                            </tr>
+                            <tr>
+                                <td>Temperature field</td>
+                                <td>Isothermal</td>
+                                <td>Spatially resolved, transient</td>
+                            </tr>
+                            <tr>
+                                <td>Thermal gradient</td>
+                                <td>Zero (assumed)</td>
+                                <td>Physically captured</td>
+                            </tr>
+                            <tr>
+                                <td>Structural input</td>
+                                <td>Direct body temperature</td>
+                                <td>Mapped nodal temperatures</td>
+                            </tr>
+                            <tr>
+                                <td>Cooling condition</td>
+                                <td>None</td>
+                                <td>Forced (45 W/m²K) and Natural (20 W/m²K)</td>
+                            </tr>
+                            <tr>
+                                <td>Solder model</td>
+                                <td>Anand viscoplastic</td>
+                                <td>Anand viscoplastic</td>
+                            </tr>
+                            <tr>
+                                <td>Fatigue method</td>
+                                <td>Kanchanomai + Andersson</td>
+                                <td>Kanchanomai + Andersson</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align: center;">
+                        <img src="./images/projects/flipchip-2ndmodel.png"
+                             alt="Phase 2 coupled thermal-structural model of the HPC package showing silicon chip, glass, solder joints and substrate"
+                             class="project-image" style="width: 85%;">
+                        <p class="image-caption">HPC package: 2D coupled thermal-structural model, with internal heat generation in the die and a convection boundary on the package</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 2 Model Setup -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — MODEL SETUP
+                </h2>
+                <div class="row" style="margin-bottom: 25px;">
+                    <div class="column">
+                        <div class="card" style="height: 100%;">
+                            <h4>HEAT GENERATION</h4>
+                            <ul class="feature-list">
+                                <li>100 W/cm³ volumetric heat generation in the silicon die</li>
+                                <li>Duty cycle: 60 s ramp / 60 s peak / 60 s cool / 60 s off (240 s per cycle)</li>
+                                <li>10 cycles solved; the stabilized response is extracted from the 10<sup>th</sup> cycle</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="card" style="height: 100%;">
+                            <h4>COOLING & SOLVE SEQUENCE</h4>
+                            <ul class="feature-list">
+                                <li>Forced convection: h = 45 W/m²K</li>
+                                <li>Natural convection: h = 20 W/m²K</li>
+                                <li><strong>Step 1:</strong> Transient Thermal → stabilized nodal temperature field</li>
+                                <li><strong>Step 2:</strong> Import cycle-10 field as a body load → Static Structural</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phase 2 Thermal Results -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — THERMAL RESULTS
+                </h2>
+                <div class="row" style="margin-bottom: 25px;">
+                    <div class="column">
+                        <div class="card" style="height: 100%;">
+                            <h4>Forced convection — h = 45 W/m²K</h4>
+                            <p>Peak die temperature <strong>64 °C</strong>, uniform distribution and thermally stable across the cycle.</p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="card" style="height: 100%;">
+                            <h4>Natural convection — h = 20 W/m²K</h4>
+                            <p>Peak die temperature <strong>107 °C</strong>, <strong>43 °C hotter</strong> than the forced case, with a correspondingly steeper gradient through the stack.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <p>The same silicon, the same power, the same package — only the enclosure's ability to move air changes. That single boundary condition sets everything downstream.</p>
+                </div>
+            </section>
+
+            <!-- Phase 2 Stress and Deformation -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — STRESS & DEFORMATION
+                </h2>
+                <div class="card">
+                    <div style="text-align: center;">
+                        <img src="./images/projects/flipchip-results1.png"
+                             alt="Von Mises stress and total deformation contours comparing forced and natural convection cases"
+                             class="project-image" style="width: 100%;">
+                        <p class="image-caption">Von Mises stress (top) and total deformation (bottom) — forced convection at left, natural convection at right</p>
+                    </div>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Quantity</th>
+                                <th>Forced convection</th>
+                                <th>Natural convection</th>
+                                <th>Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Peak Von Mises stress</td>
+                                <td>88 MPa</td>
+                                <td>175 MPa</td>
+                                <td>2×</td>
+                            </tr>
+                            <tr>
+                                <td>Max total deformation</td>
+                                <td>0.005 mm</td>
+                                <td>0.015 mm</td>
+                                <td>3×</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>A steeper temperature gradient produces a larger mismatch strain between the low-CTE die/glass and the high-CTE board, and the plastic strain that the solder has to absorb rises with it.</p>
+                </div>
+            </section>
+
+            <!-- Phase 2 Plastic Strain -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — PLASTIC STRAIN & THE CRITICAL FINDING
+                </h2>
+                <div class="card">
+                    <div style="text-align: center;">
+                        <img src="./images/projects/flipchip-results2.png"
+                             alt="Equivalent plastic strain contours for top Sn-Ag and bottom SAC305 joints under forced and natural convection"
+                             class="project-image" style="width: 100%;">
+                        <p class="image-caption">Equivalent plastic strain — die-side Sn-Ag joints at left, board-side SAC305 joints at right; forced convection top row, natural convection bottom row</p>
+                    </div>
+                    <h4>Critical finding</h4>
+                    <ul class="feature-list">
+                        <li>The <strong>bottom SAC305 joints carry roughly 20× more plastic strain</strong> than the top Sn-Ag joints (0.199 vs 0.009 mm/mm forced; 0.556 vs 0.024 mm/mm natural) — a failure location that is completely invisible in the isothermal Phase 1 model</li>
+                        <li>Board-level reliability therefore becomes sensitive to <strong>cooling strategy and board mounting conditions</strong>, not just to package-internal design choices</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Phase 2 Fatigue Life -->
+            <section class="section">
+                <h2 class="section-title">
+                    PHASE 2 — FATIGUE LIFE & DESIGN CONCLUSIONS
+                </h2>
+                <div class="card">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Joint location</th>
+                                <th>Cooling</th>
+                                <th>N<sub>f</sub> (cycles)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Top Sn-Ag (die-side)</td>
+                                <td>Forced</td>
+                                <td>10,814</td>
+                            </tr>
+                            <tr>
+                                <td>Top Sn-Ag (die-side)</td>
+                                <td>Natural</td>
+                                <td>2,846</td>
+                            </tr>
+                            <tr>
+                                <td>Bottom SAC305 (board-side)</td>
+                                <td>Forced</td>
+                                <td>1,491</td>
+                            </tr>
+                            <tr>
+                                <td>Bottom SAC305 (board-side)</td>
+                                <td>Natural</td>
+                                <td><strong>324</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="feature-list">
+                        <li><strong>Bottom SAC305 joints govern package life</strong> — they are the weakest link in all four cases</li>
+                        <li>Forced convection extends bottom joint life by <strong>4.6×</strong> (324 → 1,491 cycles)</li>
+                        <li>The natural convection case shows <strong>plastic ratcheting</strong> rather than a stable cyclic response, meaning strain keeps accumulating cycle over cycle instead of settling into a closed hysteresis loop</li>
+                        <li><strong>Thermal management is a mechanical reliability lever</strong>, not just a temperature-compliance exercise</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- System-Level Implications -->
+            <section class="section">
+                <h2 class="section-title">
+                    SYSTEM-LEVEL IMPLICATIONS
+                </h2>
+                <div class="card">
+                    <p>Hardware like this ships inside automotive compute modules, robotics compute stacks, and rack-mounted AI servers — environments with continuous power dissipation, forced airflow cooling, thermal gradients across boards, and mechanical vibration and shock. In each case the chain runs the same way:</p>
+                    <ul class="feature-list">
+                        <li>Power dissipation → thermal gradients in the system</li>
+                        <li>Material expansion mismatch → constrained structural deformation</li>
+                        <li>Thermal strain → loads transferred to mounts, fasteners, and interconnects</li>
+                        <li>Thermal cycling → fatigue risk at critical hardware interfaces</li>
+                    </ul>
+                    <p>The practical consequence for enclosure and system design: a decision made at the chassis level — fan versus passive, airflow path, board standoff and mounting stiffness — propagates all the way down to plastic strain in a 50 µm solder joint. In this study that decision was worth a 4.6× difference in the life of the joint that governs the package.</p>
+                </div>
             </section>
 
             <!-- Impact -->
@@ -624,9 +1004,17 @@
                     <!-- <img src="/placeholder.svg?height=300&width=800" alt="Project impact visualization" class="project-image">
                     <p class="image-caption">Reliability improvement through optimized design parameters</p> -->
                     
-                    <p>This study offers a validated simulation-based strategy to guide the design of reliable, high-density flip-chip assemblies for next-gen electronics. It pinpoints material and structural interactions that contribute to premature failure and proposes physically grounded optimizations to extend device lifespan.</p>
-                    
-                    <p>From a systems engineering perspective, the work also provides a risk-reduction framework that integrates failure identification, sensitivity analysis, and simulation-validated design tradeoffs—critical for manufacturable, robust packaging solutions.</p>
+                    <p>This study offers a simulation-based strategy to guide the design of reliable, high-density flip-chip assemblies for next-gen electronics. It pinpoints the material and structural interactions that drive premature failure and proposes physically grounded optimizations to extend device lifespan.</p>
+
+                    <p>From a systems engineering perspective, the work provides a risk-reduction framework that integrates failure identification, sensitivity analysis, and simulation-validated design tradeoffs — critical for manufacturable, robust packaging solutions.</p>
+
+                    <h4>Key takeaways</h4>
+                    <ul class="feature-list">
+                        <li>Screening models are good at exposing design sensitivities, but they can miss the operational physics entirely — Phase 1 never saw the joint that actually governs life</li>
+                        <li>Coupled thermo-mechanical analysis captures how thermal loads translate into structural strain, and is worth the extra solve cost once a design narrows</li>
+                        <li>Cooling architecture significantly influences the mechanical reliability of electronic hardware, which makes it an enclosure design constraint rather than a purely thermal one</li>
+                        <li>System-level design decisions directly affect stress in mounted components and interconnects</li>
+                    </ul>
                 </div>
             </section>
 
@@ -644,9 +1032,12 @@
                   
                     <ul class="feature-list">
                         <li>Extend to 2.5D and 3D models for improved Z-axis accuracy</li>
+                        <li>Re-run the Phase 1 parametric sweep (glass thickness, underfill coverage) under Phase 2 coupled physics, to check whether the isothermal design ranking still holds once gradients are resolved</li>
+                        <li>Sweep the convection coefficient continuously rather than at two discrete points, to find where the bottom-joint life curve turns over</li>
+                        <li>Model board mounting stiffness and standoff explicitly — the SAC305 joints are sensitive to how the PCB is constrained</li>
                         <li>Investigate arc fillet profiles and organic substrates</li>
                         <li>Study standoff height variations and multi-layer ABF effects</li>
-                        <li>Perform board-level FEM modeling (Level 2 assembly)</li>
+                        <li>Add combined thermal + vibration loading, representative of automotive and robotics duty cycles</li>
                         <li>Correlate results with experimental data from thermal cycle tests</li>
                     </ul>
                 </div>
